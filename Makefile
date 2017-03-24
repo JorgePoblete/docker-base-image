@@ -14,17 +14,24 @@ build:
 	fi
 
 run:
-	DPID=$(call RUNNING); \
+	${MAKE} build; \
+	DPID=$(call BACKRUNNING); \
 	if [ ! "$$DPID" ]; then \
-		docker run -it -h $(HOSTNAME) --name $(CONTAINER_NAME) $(IMAGE_NAME); \
+		DPID=$(call RUNNING); \
+		if [ ! "$$DPID" ]; then \
+			docker run -it -h $(HOSTNAME) --name $(CONTAINER_NAME) $(IMAGE_NAME); \
+		fi; \
 	fi
 
 attach:
-	DPID=$(call RUNNING); \
-	if [ "$$DPID" ]; then \
-		docker attach $(CONTAINER_NAME); \
+	DPID=$(call BACKRUNNING); \
+	if [ ! "$$DPID" ]; then \
+		${MAKE} run; \
 	else \
-		${MAKE} start; \
+		DPID=$(call RUNNING); \
+		if [ ! "$$DPID" ]; then \
+			${MAKE} start; \
+		fi; \
 		docker attach $(CONTAINER_NAME); \
 	fi
 

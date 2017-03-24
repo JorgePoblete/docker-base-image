@@ -14,5 +14,5 @@ RUN apt-get install -y -q python2.7-dev
 RUN apt-get install -y -q cmake
 RUN apt-get install -y -q build-essential
 
-RUN mkdir -p /home/koke
-WORKDIR /home/koke
+RUN mkdir -p /home/docker
+WORKDIR /home/docker
